@@ -4,17 +4,16 @@ project(VulkanOBJRenderer LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Vulkan
+# ── Dependencies ─────────────────────────────────────────────────────────────
 find_package(Vulkan REQUIRED)
-
-# GLFW
 find_package(glfw3 3.3 REQUIRED)
-
-# GLM
 find_package(glm REQUIRED)
 
-# Sources
-file(GLOB_RECURSE SOURCES src/*.cpp)
+# ── Sources (add new .cpp files here as you progress) ───────────────────────
+set(SOURCES
+    src/main.cpp
+    src/core/VulkanContext.cpp
+)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
@@ -29,7 +28,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     glm::glm
 )
 
-# Shader compilation
+# ── Shader compilation (GLSL → SPIR-V) ──────────────────────────────────────
 find_program(GLSLC glslc HINTS $ENV{VULKAN_SDK}/bin)
 
 file(GLOB SHADERS shaders/*.vert shaders/*.frag shaders/*.comp)
@@ -47,3 +46,9 @@ endforeach()
 
 add_custom_target(compile_shaders ALL DEPENDS ${SPIRV_FILES})
 add_dependencies(${PROJECT_NAME} compile_shaders)
+
+# ── Symlink assets into build directory ──────────────────────────────────────
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E create_symlink
+        ${CMAKE_SOURCE_DIR}/assets ${CMAKE_BINARY_DIR}/assets
+)

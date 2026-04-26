@@ -4,3 +4,5 @@ build/
 .vscode/
 .idea/
 compile_commands.json
+assets/models/*.obj
+assets/models/*.mtl
