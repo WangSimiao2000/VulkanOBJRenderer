@@ -1,0 +1,6 @@
+build/
+*.spv
+.cache/
+.vscode/
+.idea/
+compile_commands.json
