@@ -10,7 +10,7 @@ VulkanOBJRenderer/
 │   │   └── Buffer.h/cpp       #   通用 Buffer/Image 创建 + 内存分配工具
 │   │
 │   ├── renderer/               # 渲染管线（决定"怎么画"）
-│   │   ├── Pipeline.h/cpp     #   基础渲染管线（RenderPass, Pipeline, Framebuffer）
+│   │   ├── Pipeline.h/cpp     #   基础渲染管线（Pipeline, PipelineLayout）
 │   │   ├── Descriptors.h/cpp  #   Descriptor Pool/Set 管理
 │   │   ├── ShadowMap.h/cpp    #   阴影贴图 Pass
 │   │   └── SSAO.h/cpp         #   屏幕空间环境光遮蔽 Pass

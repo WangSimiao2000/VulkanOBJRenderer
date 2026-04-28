@@ -16,7 +16,7 @@
 **你会学到：**
 - VkInstance、VkDevice、VkQueue 的创建和关系
 - Swapchain 是什么、为什么需要多个 image
-- RenderPass 和 Framebuffer 的概念
+- Image Layout Transition 和 Pipeline Barrier
 - Command Buffer 的录制和提交
 - 同步原语：Semaphore（GPU-GPU 同步）和 Fence（CPU-GPU 同步）
 
@@ -28,7 +28,7 @@ glfwCreateWindow
        ↓
 VkInstance → VkSurface → VkPhysicalDevice → VkDevice
        ↓
-VkSwapchain → VkImage[] → VkImageView[] → VkFramebuffer[]
+VkSwapchain → VkImage[] → VkImageView[]
        ↓
 主循环: acquireImage → recordCmd(clearColor) → submit → present
        ↓
@@ -52,14 +52,15 @@ VkSwapchain → VkImage[] → VkImageView[] → VkFramebuffer[]
 **你会学到：**
 - GLSL 着色器基础（顶点输入 → 光栅化 → 片段输出）
 - VkPipeline 的创建（所有固定功能状态的配置）
+- Dynamic Rendering（vkCmdBeginRendering / vkCmdEndRendering）
 - Vertex Buffer 的创建和绑定
 - `vkCmdDraw` 的调用
 
 **实现要点：**
 1. 写一个最简单的 vert/frag shader（位置 + 颜色，无变换）
-2. 在 Pipeline.cpp 中配置完整的 pipeline state
+2. 在 Pipeline.cpp 中配置完整的 pipeline state（用 VkPipelineRenderingCreateInfo 指定 attachment 格式）
 3. 硬编码 3 个顶点到 vertex buffer
-4. 在 render loop 中 bind pipeline → bind vertex buffer → draw
+4. 在 render loop 中 vkCmdBeginRendering → bind pipeline → bind vertex buffer → draw → vkCmdEndRendering
 
 **验证标准：** 屏幕中央显示一个彩色三角形。
 
@@ -114,10 +115,9 @@ VkSwapchain → VkImage[] → VkImageView[] → VkFramebuffer[]
 
 **实现要点：**
 1. 创建 depth image（VK_FORMAT_D32_SFLOAT）+ image view
-2. 修改 render pass 添加 depth attachment
-3. 修改 framebuffer 包含 depth image view
-4. Pipeline 启用 depthTestEnable + depthWriteEnable
-5. Model 类：加载 OBJ → staging buffer → device local buffer
+2. 在 vkCmdBeginRendering 中通过 pDepthAttachment 指定 depth attachment
+3. Pipeline 启用 depthTestEnable + depthWriteEnable
+4. Model 类：加载 OBJ → staging buffer → device local buffer
 
 **验证标准：** 屏幕上显示 OBJ 模型，旋转时遮挡关系正确。
 
