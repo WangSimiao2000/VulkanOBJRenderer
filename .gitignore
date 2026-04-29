@@ -6,3 +6,11 @@ build/
 compile_commands.json
 assets/models/*.obj
 assets/models/*.mtl
+
+# AI agents
+.claude/
+.opencode/
+.cursor/
+.aider*
+.copilot/
+.codeium/
